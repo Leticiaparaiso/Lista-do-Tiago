@@ -58,13 +58,13 @@
       "units": 0
     },
     {
-      "name": "Aparelho de ruído branco com 20 sons",
+      "name": "Aparelho de ruído branco com suporte",
       "category": "Sono",
       "price": "R$ 90,00",
       "link": "https://br.shp.ee/iNxvmqw2",
       "store": "Amazon",
       "img": "https://m.media-amazon.com/images/I/31QOtF7YbqL._AC_SL400_.jpg",
-      "note": "",
+      "note": "Aparelho com suporte",
       "qty": 1,
       "got": 0,
       "taken": false,
