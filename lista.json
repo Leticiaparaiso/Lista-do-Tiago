@@ -502,6 +502,19 @@
       "goal": 0,
       "raised": 0,
       "id": "imudznzsoivaw"
+    },
+    {
+      "name": "Mochila da Kipling",
+      "category": "",
+      "price": "1.399,00",
+      "link": "https://www.kipling.com.br/mochila-kipling-maisie-i3339b2c/p",
+      "store": "",
+      "note": "Mochila Maisie - verde. \n\nEsse é o preço no BR. Nos EUA é bem mais em conta (160 dólares). Caso prefira, temos 02 pessoas que podem trazer no período de 21/10 a 31/10.",
+      "taken": false,
+      "pool": true,
+      "goal": 1399,
+      "raised": 0,
+      "id": "imue08tavum2j"
     }
   ]
 }
