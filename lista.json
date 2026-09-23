@@ -27,15 +27,13 @@
       "goal": 289,
       "raised": 0,
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Aparelho de ruído branco com 20 sons",
       "category": "Sono",
       "price": "R$ 90,00",
-      "link": "https://br.shp.ee/iNxvmqw2",
+      "link": "br.shp.ee/iNxvmqw2",
       "store": "Amazon",
       "img": "https://m.media-amazon.com/images/I/31QOtF7YbqL._AC_SL400_.jpg",
       "note": "",
@@ -47,9 +45,7 @@
       "raised": 0,
       "id": "a01",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "id": "l1",
@@ -67,9 +63,7 @@
       "goal": 0,
       "raised": 0,
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "id": "imudz2me6t3fx",
@@ -87,9 +81,7 @@
       "goal": 1400,
       "raised": 0,
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Protetor de colchão impermeável para berço",
@@ -107,9 +99,7 @@
       "raised": 0,
       "id": "a05",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Colchonete para berço Cosco Kids",
@@ -127,9 +117,7 @@
       "raised": 0,
       "id": "a06",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "id": "mosq1",
@@ -147,9 +135,7 @@
       "pixOnly": false,
       "goal": 0,
       "raised": 0,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "id": "lencol-solteiro",
@@ -167,9 +153,7 @@
       "pixOnly": false,
       "goal": 0,
       "raised": 0,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "id": "lencol-berco",
@@ -187,9 +171,7 @@
       "pixOnly": false,
       "goal": 0,
       "raised": 0,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Gel Lavante Suave Mustela 750 ml",
@@ -207,9 +189,7 @@
       "raised": 0,
       "id": "a07",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Refil Gel Lavante Suave Mustela 400 ml",
@@ -227,9 +207,7 @@
       "raised": 0,
       "id": "a08",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Hidratante Mustela Hydra Bebê 500 ml",
@@ -247,9 +225,7 @@
       "raised": 0,
       "id": "a09",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Almofada de banho para bebê",
@@ -267,49 +243,7 @@
       "raised": 0,
       "id": "a10",
       "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
-    },
-    {
-      "id": "imue08tavum2j",
-      "name": "Mochila da Kipling",
-      "category": "Passeio",
-      "price": "R$ 1.399,00",
-      "link": "https://www.kipling.com.br/mochila-kipling-maisie-i3339b2c/p",
-      "store": "Kipling",
-      "img": "https://kipling.vtexassets.com/arquivos/ids/220254/KPKI3339B2C_1.jpg",
-      "note": "Mochila Maisie - verde. \n\nEsse é o preço no BR. Nos EUA é bem mais em conta (160 dólares). Caso prefira, temos 02 pessoas que podem trazer no período de 21/10 a 31/10.",
-      "qty": 1,
-      "got": 0,
-      "taken": false,
-      "pool": true,
-      "goal": 1399,
-      "raised": 0,
-      "pixOnly": false,
-      "sub": "",
-      "meta": "",
-      "units": 0
-    },
-    {
-      "id": "imudznzsoivaw",
-      "name": "Contribuição livre",
-      "category": "Outros",
-      "price": "",
-      "link": "",
-      "store": "",
-      "img": "",
-      "note": "Não achou o que gostaria e ainda quer dar um presentinho? Não tem problema! Nosso pix está na página <3",
-      "qty": 1,
-      "got": 0,
-      "taken": false,
-      "pool": false,
-      "pixOnly": true,
-      "goal": 0,
-      "raised": 0,
-      "sub": "",
-      "meta": "",
-      "units": 0
+      "sub": ""
     },
     {
       "name": "Fralda Huggies Premium Natural Care P",
@@ -327,9 +261,7 @@
       "raised": 0,
       "id": "a11",
       "pixOnly": false,
-      "sub": "Tamanho P",
-      "meta": "fr-p",
-      "units": 36
+      "sub": "Tamanho P"
     },
     {
       "name": "Fralda Pampers Confort Sec P",
@@ -347,9 +279,7 @@
       "raised": 0,
       "id": "a12",
       "pixOnly": false,
-      "sub": "Tamanho P",
-      "meta": "fr-p",
-      "units": 72
+      "sub": "Tamanho P"
     },
     {
       "name": "Fralda Pampers Premium Care P",
@@ -367,9 +297,7 @@
       "raised": 0,
       "id": "a14",
       "pixOnly": false,
-      "sub": "Tamanho P",
-      "meta": "fr-p",
-      "units": 40
+      "sub": "Tamanho P"
     },
     {
       "name": "Fralda Pampers Premium Care Pants M",
@@ -387,9 +315,7 @@
       "raised": 0,
       "id": "a15",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 34
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Confort Sec M",
@@ -407,9 +333,7 @@
       "raised": 0,
       "id": "a16",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 44
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Confort Sec M (pacotão)",
@@ -427,9 +351,7 @@
       "raised": 0,
       "id": "a17",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 196
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Premium Care Pants M",
@@ -447,9 +369,7 @@
       "raised": 0,
       "id": "a18",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 78
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Premium Care Pants M",
@@ -467,9 +387,7 @@
       "raised": 0,
       "id": "a19",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 124
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Premium Care M - 34 unid",
@@ -487,9 +405,7 @@
       "raised": 0,
       "id": "a20",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 34
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Premium Care M - 160 unid",
@@ -507,9 +423,7 @@
       "raised": 0,
       "id": "a21",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 160
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Personal Baby Premium Pants M",
@@ -527,9 +441,7 @@
       "raised": 0,
       "id": "a22",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 70
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Personal Baby Premium Pants M",
@@ -547,9 +459,7 @@
       "raised": 0,
       "id": "a23",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 48
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Personal Baby Premium Protection M",
@@ -567,9 +477,7 @@
       "raised": 0,
       "id": "a24",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 62
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Personal Baby Premium Protection M",
@@ -587,9 +495,7 @@
       "raised": 0,
       "id": "a25",
       "pixOnly": false,
-      "sub": "Tamanho M",
-      "meta": "fr-m",
-      "units": 34
+      "sub": "Tamanho M"
     },
     {
       "name": "Fralda Pampers Confort Sec G",
@@ -607,9 +513,7 @@
       "raised": 0,
       "id": "a26",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 128
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Pampers Pants Ajuste Total G",
@@ -627,9 +531,7 @@
       "raised": 0,
       "id": "a27",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 144
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Pampers Premium Care Pants G",
@@ -647,9 +549,7 @@
       "raised": 0,
       "id": "a28",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 112
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Pampers Premium Care Pants G",
@@ -667,9 +567,7 @@
       "raised": 0,
       "id": "a29",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 68
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Huggies Supreme Care G",
@@ -687,9 +585,7 @@
       "raised": 0,
       "id": "a30",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 64
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Huggies Máxima Proteção G",
@@ -707,9 +603,7 @@
       "raised": 0,
       "id": "a31",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 32
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Huggies Máxima Proteção G",
@@ -727,9 +621,7 @@
       "raised": 0,
       "id": "a32",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 66
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Huggies Máxima Proteção G (pacotão)",
@@ -747,9 +639,7 @@
       "raised": 0,
       "id": "a33",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 160
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Personal Baby Premium Pants G",
@@ -767,9 +657,7 @@
       "raised": 0,
       "id": "a34",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 62
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Personal Baby Premium Protection G",
@@ -787,9 +675,7 @@
       "raised": 0,
       "id": "a35",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 56
+      "sub": "Tamanho G"
     },
     {
       "name": "Fralda Personal Baby Premium Protection G",
@@ -807,35 +693,43 @@
       "raised": 0,
       "id": "a36",
       "pixOnly": false,
-      "sub": "Tamanho G",
-      "meta": "fr-g",
-      "units": 30
-    }
-  ],
-  "metas": [
-    {
-      "id": "fr-p",
-      "name": "Fraldas P",
-      "unit": "fraldas",
-      "min": 300,
-      "max": 350,
-      "have": 0
+      "sub": "Tamanho G"
     },
     {
-      "id": "fr-m",
-      "name": "Fraldas M",
-      "unit": "fraldas",
-      "min": 500,
-      "max": 600,
-      "have": 266
+      "id": "imue08tavum2j",
+      "name": "Mochila da Kipling",
+      "category": "Passeio",
+      "price": "R$ 1.399,00",
+      "link": "https://www.kipling.com.br/mochila-kipling-maisie-i3339b2c/p",
+      "store": "Kipling",
+      "img": "https://kipling.vtexassets.com/arquivos/ids/220254/KPKI3339B2C_1.jpg",
+      "note": "Mochila Maisie - verde. \n\nEsse é o preço no BR. Nos EUA é bem mais em conta (160 dólares). Caso prefira, temos 02 pessoas que podem trazer no período de 21/10 a 31/10.",
+      "qty": 1,
+      "got": 0,
+      "taken": false,
+      "pool": true,
+      "goal": 1399,
+      "raised": 0,
+      "pixOnly": false,
+      "sub": ""
     },
     {
-      "id": "fr-g",
-      "name": "Fraldas G",
-      "unit": "fraldas",
-      "min": 500,
-      "max": 550,
-      "have": 0
+      "id": "imudznzsoivaw",
+      "name": "Contribuição livre",
+      "category": "Outros",
+      "price": "",
+      "link": "",
+      "store": "",
+      "img": "",
+      "note": "Não achou o que gostaria e ainda quer dar um presentinho? Não tem problema! Nosso pix está na página <3",
+      "qty": 1,
+      "got": 0,
+      "taken": false,
+      "pool": false,
+      "pixOnly": true,
+      "goal": 0,
+      "raised": 0,
+      "sub": ""
     }
   ]
 }
