@@ -5,10 +5,36 @@
   "amazonList": "",
   "api": "https://script.google.com/macros/s/AKfycbwV-7aYDevaXe3-sLKMH2bBanzk3ep5l0O3y7KqXuyh1U92gXpQCijk16hEPrZArBtg/exec",
   "address": "Rua Coronel João de Oliveira, 999, apto 302B, Messejana, CEP 60.841-820 - Condomínio Percosi",
+  "metas": [
+    {
+      "id": "fr-p",
+      "name": "Fraldas P",
+      "unit": "fraldas",
+      "min": 300,
+      "max": 350,
+      "have": 0
+    },
+    {
+      "id": "fr-m",
+      "name": "Fraldas M",
+      "unit": "fraldas",
+      "min": 500,
+      "max": 600,
+      "have": 266
+    },
+    {
+      "id": "fr-g",
+      "name": "Fraldas G",
+      "unit": "fraldas",
+      "min": 500,
+      "max": 550,
+      "have": 0
+    }
+  ],
   "pix": {
-    "key": "04617536345",
-    "holder": "Letícia Vasconcelos Paraiso",
-    "city": "Fortaleza"
+    "key": "",
+    "holder": "",
+    "city": ""
   },
   "items": [
     {
@@ -279,7 +305,7 @@
       "link": "https://www.kipling.com.br/mochila-kipling-maisie-i3339b2c/p",
       "store": "Kipling",
       "img": "https://kipling.vtexassets.com/arquivos/ids/220254/KPKI3339B2C_1.jpg",
-      "note": "Mochila Maisie - verde. \n\nEsse é o preço no BR. Nos EUA é bem mais em conta (160 dólares). Caso prefira, temos 02 pessoas que podem trazer no período de 21/10 a 31/10.",
+      "note": "Mochila Maisie - verde. \n\nEsse é o preço no BR. Nos EUA é bem mais em conta (160 dólares). Caso prefira, temos 02 pessoas que podem trazer no período de 21/10 a 31/10.\n\nPara isso, o nosso pix: 04617536345 (Letícia Vasconcelos Paraiso)",
       "qty": 1,
       "got": 0,
       "taken": false,
@@ -810,32 +836,6 @@
       "sub": "Tamanho G",
       "meta": "fr-g",
       "units": 30
-    }
-  ],
-  "metas": [
-    {
-      "id": "fr-p",
-      "name": "Fraldas P",
-      "unit": "fraldas",
-      "min": 300,
-      "max": 350,
-      "have": 0
-    },
-    {
-      "id": "fr-m",
-      "name": "Fraldas M",
-      "unit": "fraldas",
-      "min": 500,
-      "max": 600,
-      "have": 266
-    },
-    {
-      "id": "fr-g",
-      "name": "Fraldas G",
-      "unit": "fraldas",
-      "min": 500,
-      "max": 550,
-      "have": 0
     }
   ]
 }
