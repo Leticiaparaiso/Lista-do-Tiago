@@ -208,7 +208,7 @@ label.f small{font-weight:400;color:var(--muted)}
 <script>
 (function(){
   var DATA = {babyName:"",intro:"",whatsapp:"",amazonList:"",api:"",address:"",metas:[],pix:{key:"",holder:"",city:""},items:[]};
-  var RES = {counts:{}, amounts:{}};
+  var RES = {counts:{}, full:{}};
   var isOwner = /[?&]editar\b/.test(location.search);
   var state = {cat:"todos", avail:false};
   var dirty = false, editingId = null, inbox = null, inboxErr = "";
@@ -272,11 +272,12 @@ label.f small{font-weight:400;color:var(--muted)}
   function reserved(it){ return Number(RES.counts[it.id])||0; }
   function left(it){ var m=metaOf(it); if(m) return Math.ceil(metaLeft(m)/it.units); return Math.max(0, it.qty - it.got - reserved(it)); }
   function goalOf(it){ return it.goal || num(it.price); }
-  function raisedOf(it){ return it.raised + (Number(RES.amounts[it.id])||0); }
+  // valor arrecadado: só a dona da lista vê (vem dos registros da planilha, com senha)
+  function raisedOf(it){ var s=it.raised; (inbox||[]).forEach(function(r){ if(r.itemId===it.id && r.status!=="cancelada") s+=Number(r.amount)||0; }); return s; }
   function isDone(it){
     if(it.taken) return true;
     if(it.pixOnly) return false;
-    if(it.pool){ var g=goalOf(it); return g>0 && raisedOf(it)>=g; }
+    if(it.pool){ var g=goalOf(it); return !!RES.full[it.id] || (g>0 && it.raised>=g); }
     return left(it)===0;
   }
   function isSpecialCat(c){ return DATA.items.some(function(it){ return cap(it.category)===c && it.meta; }); }
@@ -296,10 +297,10 @@ label.f small{font-weight:400;color:var(--muted)}
     if(!DATA.api) return Promise.resolve();
     return fetch(DATA.api+(DATA.api.indexOf("?")>=0?"&":"?")+"v="+Date.now())
       .then(function(r){ return r.json(); })
-      .then(function(s){ if(s && s.ok){ RES.counts=s.counts||{}; RES.amounts=s.amounts||{}; } })
+      .then(function(s){ if(s && s.ok){ RES.counts=s.counts||{}; RES.full=s.full||{}; } })
       .catch(function(){});
   }
-  function applySummary(s){ if(s && s.counts){ RES.counts=s.counts; RES.amounts=s.amounts||{}; } }
+  function applySummary(s){ if(s && s.counts){ RES.counts=s.counts; RES.full=s.full||{}; } }
 
   /* ---------- whatsapp (reserva, só se a planilha não estiver ligada) + pix ---------- */
   function waNum(){ var d=String(DATA.whatsapp||"").replace(/\D/g,""); if(!d) return ""; if(d.length<=11) d="55"+d; return d; }
@@ -331,11 +332,7 @@ label.f small{font-weight:400;color:var(--muted)}
 
   /* ---------- render ---------- */
   function progressHTML(it){
-    if(it.pool){
-      var g=goalOf(it); if(!g) return "";
-      var r=raisedOf(it), pct=Math.min(100,Math.round(r/g*100));
-      return '<div class="progress"><p>'+brl(r)+' de '+brl(g)+' arrecadados</p><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
-    }
+    if(it.pool) return '<p class="small">Vaquinha: dê o presente inteiro ou contribua com o valor que quiser.</p>';
     if(metaOf(it)) return '<p class="small">'+it.units+' '+esc(metaOf(it).unit)+' por pacote</p>';
     if(it.qty>1 && !it.pixOnly){
       var l=left(it), given=it.qty-l, pct2=Math.min(100,Math.round(given/it.qty*100));
@@ -368,7 +365,7 @@ label.f small{font-weight:400;color:var(--muted)}
         h+='<a class="btn btn-main" href="#pix">Ver o Pix</a>';
       } else if(it.pool){
         h+='<button class="btn btn-main" data-act="whole" data-id="'+esc(it.id)+'">Vou dar inteiro</button>';
-        if(DATA.pix && DATA.pix.key) h+='<button class="btn btn-line" style="color:var(--accent)" data-act="part" data-id="'+esc(it.id)+'">Contribuir com uma parte</button>';
+        if(DATA.api || (DATA.pix && DATA.pix.key)) h+='<button class="btn btn-line" style="color:var(--accent)" data-act="part" data-id="'+esc(it.id)+'">Contribuir com uma parte</button>';
       } else {
         h+='<button class="btn btn-main" data-act="give" data-id="'+esc(it.id)+'">Vou dar este</button>';
       }
@@ -499,20 +496,19 @@ label.f small{font-weight:400;color:var(--muted)}
     }); };
   }
   function wholeModal(it){
-    var falta=Math.max(0,goalOf(it)-raisedOf(it));
     if(!DATA.api){ var w=wa("Oi! Vi a lista de presentes e vou dar inteiro: "+it.name+" 🎁"); if(w) window.open(w,"_blank"); return; }
-    openModal('<h3>'+esc(it.name)+'</h3><p>Você vai dar este presente inteiro'+(falta?' (faltam '+brl(falta)+')':'')+'. Confirme para ele aparecer como escolhido.</p>'
+    openModal('<h3>'+esc(it.name)+'</h3><p>Você vai dar este presente inteiro. Confirme para ele aparecer como escolhido.</p>'
       +whoHTML()+'<p class="err" id="rerr"></p>'
       +'<div class="col"><button class="btn btn-main" id="rgo">Confirmar</button><button class="btn btn-line" style="color:var(--muted)" data-act="close">Cancelar</button></div>');
-    $("rgo").onclick=function(){ sendReserve({itemId:it.id,itemName:it.name,qty:1,amount:falta},this,function(){ thanks(it); }); };
+    $("rgo").onclick=function(){ sendReserve({itemId:it.id,itemName:it.name,qty:1,whole:true},this,function(){ thanks(it); }); };
   }
   function pixModal(it){
-    var g=it?goalOf(it):0, falta=it?Math.max(0,g-raisedOf(it)):0;
+    var hasPix=!!(DATA.pix && DATA.pix.key);
     openModal('<h3>'+(it?esc(it.name):'Deixar um recado')+'</h3>'
-      +(it?'<p>Vaquinha'+(g?': faltam <b>'+brl(falta)+'</b> de '+brl(g):'')+'.</p>':'<p>Fez um Pix? Conte quanto foi e deixe um recadinho.</p>')
-      +'<label class="f"><span>Valor do Pix (R$)</span><input id="pv" inputmode="decimal" placeholder="Ex.: 100"></label>'
-      +(it?'<div class="col"><button class="btn btn-soft" id="pgen">Gerar Pix com este valor</button></div><div class="col" id="pout" hidden><div class="qr" id="pqr"></div><div class="code" id="pcode"></div><button class="btn btn-soft" id="pcopy">Copiar Pix copia e cola</button></div>':'')
-      +(DATA.api? whoHTML()+'<p class="err" id="rerr"></p><div class="col"><button class="btn btn-main" id="rgo">Já fiz o Pix, registrar</button>' : '<div class="col"><a class="btn btn-main" id="pwa" target="_blank" rel="noopener">Já fiz o Pix, avisar pelo WhatsApp</a>')
+      +(it?'<p>Contribua com o valor que quiser para este presente.'+(hasPix?'':' Depois combinamos com você a forma de pagamento.')+'</p>':'<p>Fez um Pix? Conte quanto foi e deixe um recadinho.</p>')
+      +'<label class="f"><span>Valor da contribuição (R$)</span><input id="pv" inputmode="decimal" placeholder="Ex.: 100"></label>'
+      +(it&&hasPix?'<div class="col"><button class="btn btn-soft" id="pgen">Gerar Pix com este valor</button></div><div class="col" id="pout" hidden><div class="qr" id="pqr"></div><div class="code" id="pcode"></div><button class="btn btn-soft" id="pcopy">Copiar Pix copia e cola</button></div>':'')
+      +(DATA.api? whoHTML()+'<p class="err" id="rerr"></p><div class="col"><button class="btn btn-main" id="rgo">'+(hasPix?'Já fiz o Pix, registrar':'Registrar contribuição')+'</button>' : '<div class="col"><a class="btn btn-main" id="pwa" target="_blank" rel="noopener">Já fiz o Pix, avisar pelo WhatsApp</a>')
       +'<button class="btn btn-line" style="color:var(--muted)" data-act="close">Fechar</button></div>');
     if($("pgen")) $("pgen").onclick=function(){
       var v=num($("pv").value); if(!(v>0)){ toast("Digite um valor."); return; }
@@ -521,7 +517,7 @@ label.f small{font-weight:400;color:var(--muted)}
     };
     if($("pwa")) $("pwa").onclick=function(){ this.href=wa("Oi! Contribuí com "+brl(num($("pv").value))+" para: "+(it?it.name:"o Pix")+" 🎁"); };
     if($("rgo")) $("rgo").onclick=function(){
-      var v=num($("pv").value); if(it && !(v>0)){ $("rerr").textContent="Informe o valor do Pix."; return; }
+      var v=num($("pv").value); if(it && !(v>0)){ $("rerr").textContent="Informe o valor da contribuição."; return; }
       sendReserve({itemId:it?it.id:"pix",itemName:it?it.name:"Pix livre",qty:0,amount:v},this,function(){ thanks(null,'<p class="small" style="margin-top:10px">Muito obrigada pelo carinho!</p>'); });
     };
   }
@@ -575,7 +571,7 @@ label.f small{font-weight:400;color:var(--muted)}
     var h='<ul class="elist">';
     DATA.items.forEach(function(it,i){
       var info=esc(cap(it.category))+(it.sub?' › '+esc(it.sub):'');
-      if(it.pool) info+=' · vaquinha '+brl(raisedOf(it))+' de '+brl(goalOf(it));
+      if(it.pool) info+=' · vaquinha '+(inbox?brl(raisedOf(it))+' de '+brl(goalOf(it)):'(veja o valor em Presentes e recados)');
       else if(metaOf(it)) info+=' · '+it.units+' '+esc(metaOf(it).unit)+'/pacote'+(reserved(it)?' · '+reserved(it)+' pacote'+(reserved(it)>1?'s':'')+' pelo site':'');
       else if(!it.pixOnly) info+=' · '+(it.qty-left(it))+' de '+it.qty+' escolhido'+(it.qty-left(it)===1?'':'s')+(reserved(it)?' ('+reserved(it)+' pelo site)':'');
       var done=isDone(it);
@@ -598,7 +594,9 @@ label.f small{font-weight:400;color:var(--muted)}
     if(inbox){
       var act=inbox.filter(function(r){return r.status!=="cancelada";});
       var tot=act.reduce(function(s,r){return s+(Number(r.amount)||0);},0);
-      h+='<div class="stats" style="margin-top:14px"><span><b>'+act.length+'</b>registros</span><span><b>'+act.filter(function(r){return r.message;}).length+'</b>recados</span>'+(tot?'<span><b>'+brl(tot)+'</b>em Pix declarados</span>':'')+'</div>';
+      h+='<div class="stats" style="margin-top:14px"><span><b>'+act.length+'</b>registros</span><span><b>'+act.filter(function(r){return r.message;}).length+'</b>recados</span>'+(tot?'<span><b>'+brl(tot)+'</b>em contribuições</span>':'')+'</div>';
+      var pools=DATA.items.filter(function(x){return x.pool;});
+      if(pools.length) h+='<div class="stats">'+pools.map(function(x){ var g=goalOf(x), r=raisedOf(x); return '<span><b>'+brl(r)+(g?' de '+brl(g):'')+'</b>'+esc(x.name)+(g&&r>=g?' · completo':'')+'</span>'; }).join('')+'</div><p class="small" style="margin:-4px 0 10px">Só você vê estes valores. Os convidados veem apenas se o presente ainda está disponível.</p>';
       if(!inbox.length) h+='<p class="meta">Ninguém escolheu presentes pelo site ainda.</p>';
       else {
         h+='<ul class="inbox">';
