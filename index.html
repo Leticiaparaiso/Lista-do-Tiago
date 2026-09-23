@@ -179,6 +179,12 @@ label.f small{font-weight:400;color:var(--muted)}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .stats span{background:var(--bg);border-radius:12px;padding:8px 12px;font-size:14px}
 .stats b{font-size:18px;display:block}
+.metabox{background:var(--paper);box-shadow:var(--shadow);border-radius:16px;padding:14px 16px;margin:0 0 14px}
+.metabox p{margin:0 0 8px;font-weight:700}
+.metabox p.small{margin:8px 0 0;font-weight:400}
+.metas .row3{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:8px;align-items:end;padding:10px 0;border-top:1px solid var(--line)}
+.metas .row3:first-child{border-top:0}
+@media(max-width:700px){.metas .row3{grid-template-columns:1fr 1fr}}
 .addr{background:var(--paper);box-shadow:var(--shadow);margin:16px 0 8px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .addr .txt{flex:1 1 280px;min-width:0}
 .addr h2{font-size:22px;margin-bottom:6px}
@@ -195,7 +201,7 @@ label.f small{font-weight:400;color:var(--muted)}
 
 <script>
 (function(){
-  var DATA = {babyName:"",intro:"",whatsapp:"",amazonList:"",api:"",address:"",pix:{key:"",holder:"",city:""},items:[]};
+  var DATA = {babyName:"",intro:"",whatsapp:"",amazonList:"",api:"",address:"",metas:[],pix:{key:"",holder:"",city:""},items:[]};
   var RES = {counts:{}, amounts:{}};
   var isOwner = /[?&]editar\b/.test(location.search);
   var state = {cat:"todos", avail:false};
@@ -237,16 +243,28 @@ label.f small{font-weight:400;color:var(--muted)}
     it.got = Math.max(0, parseInt(it.got,10)||0);
     it.taken = !!it.taken; it.pool = !!it.pool; it.pixOnly = !!it.pixOnly;
     it.goal = num(it.goal); it.raised = num(it.raised);
+    it.meta = it.meta||""; it.units = Math.max(0, parseInt(it.units,10)||0);
     return it;
+  }
+  function normMeta(m){
+    m=m||{}; m.id=m.id||("m"+uid()); m.name=m.name||""; m.unit=m.unit||"fraldas";
+    m.min=Math.max(0,parseInt(m.min,10)||0); m.max=Math.max(m.min,parseInt(m.max,10)||m.min); m.have=Math.max(0,parseInt(m.have,10)||0);
+    return m;
   }
   function setData(d){
     d = d||{};
     DATA.babyName = d.babyName||""; DATA.intro = d.intro||""; DATA.whatsapp = d.whatsapp||""; DATA.amazonList = d.amazonList||""; DATA.api = d.api||""; DATA.address = d.address||"";
     DATA.pix = d.pix||{key:"",holder:"",city:""};
     DATA.items = (d.items||[]).map(norm);
+    DATA.metas = (d.metas||[]).map(normMeta);
   }
+  function metaById(id){ for(var i=0;i<(DATA.metas||[]).length;i++) if(DATA.metas[i].id===id) return DATA.metas[i]; return null; }
+  function metaOf(it){ return (it && it.meta && it.units>0) ? metaById(it.meta) : null; }
+  function metaUsed(m){ var s=m.have; DATA.items.forEach(function(it){ if(it.meta===m.id && it.units>0) s+=(Number(RES.counts[it.id])||0)*it.units; }); return s; }
+  function metaLeft(m){ return Math.max(0, m.min - metaUsed(m)); }
+  function metaRange(m){ return m.max>m.min ? m.min+' a '+m.max : String(m.min); }
   function reserved(it){ return Number(RES.counts[it.id])||0; }
-  function left(it){ return Math.max(0, it.qty - it.got - reserved(it)); }
+  function left(it){ var m=metaOf(it); if(m) return Math.ceil(metaLeft(m)/it.units); return Math.max(0, it.qty - it.got - reserved(it)); }
   function goalOf(it){ return it.goal || num(it.price); }
   function raisedOf(it){ return it.raised + (Number(RES.amounts[it.id])||0); }
   function isDone(it){
@@ -311,6 +329,7 @@ label.f small{font-weight:400;color:var(--muted)}
       var r=raisedOf(it), pct=Math.min(100,Math.round(r/g*100));
       return '<div class="progress"><p>'+brl(r)+' de '+brl(g)+' arrecadados</p><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
     }
+    if(metaOf(it)) return '<p class="small">'+it.units+' '+esc(metaOf(it).unit)+' por pacote</p>';
     if(it.qty>1 && !it.pixOnly){
       var l=left(it), given=it.qty-l, pct2=Math.min(100,Math.round(given/it.qty*100));
       var txt = l===0 ? 'Todos os '+it.qty+' já foram escolhidos' : 'Precisamos de '+it.qty+' · falta'+(l>1?'m ':' ')+l;
@@ -326,7 +345,7 @@ label.f small{font-weight:400;color:var(--muted)}
     h+=GIFT;
     if(done) h+='<span class="badge done">Já escolhido</span>';
     else if(it.pool) h+='<span class="badge pool">Vaquinha</span>';
-    if(!done && !it.pool && !it.pixOnly && it.qty>1) h+='<span class="badge qty">faltam '+left(it)+'</span>';
+    if(!done && !it.pool && !it.pixOnly && !metaOf(it) && it.qty>1) h+='<span class="badge qty">faltam '+left(it)+'</span>';
     h+='</div><div class="body">';
     h+='<p class="name">'+esc(it.name)+'</p>';
     var meta=[]; if(it.store) meta.push(esc(it.store)); if(price) meta.push('<b>'+esc(price)+'</b>');
@@ -349,6 +368,11 @@ label.f small{font-weight:400;color:var(--muted)}
       h+='</div>';
     }
     return h+'</div></article>';
+  }
+  function metaBox(m){
+    var used=metaUsed(m), l=metaLeft(m), pct=m.min?Math.min(100,Math.round(used/m.min*100)):100;
+    var txt = l===0 ? 'Meta completa! Já temos '+used+' '+esc(m.unit)+'. Obrigada!' : 'Precisamos de '+metaRange(m)+' '+esc(m.unit)+' · já temos '+used+' · faltam '+l;
+    return '<div class="metabox"><p>'+txt+'</p><div class="bar"><i style="width:'+pct+'%"></i></div><p class="small">Escolha qualquer marca ou tamanho de pacote: somamos as '+esc(m.unit)+' de todos os pacotes.</p></div>';
   }
   function gridHTML(list){
     list = list.filter(function(it){return !isDone(it);}).concat(list.filter(isDone));
@@ -409,6 +433,8 @@ label.f small{font-weight:400;color:var(--muted)}
           var sl=list.filter(function(it){ return it.sub.trim()===s; });
           var sa=sl.filter(function(it){return !isDone(it);}).length;
           if(s) h+='<div class="subhead" id="sub-'+slug(c+"-"+s)+'"><h3>'+esc(s)+'</h3><span>'+sa+' disponíve'+(sa===1?'l':'is')+'</span></div>';
+          var sm=metaOf(sl[0]);
+          if(sm && sl.every(function(x){return x.meta===sm.id;})) h+=metaBox(sm);
           h+=gridHTML(sl);
         });
       } else {
@@ -444,14 +470,19 @@ label.f small{font-weight:400;color:var(--muted)}
       +'<button class="btn btn-line" style="color:var(--muted)" data-act="close">Fechar</button></div>';
   }
   function giveModal(it){
-    var max=left(it), n=1;
+    var max=left(it), n=1, gm=metaOf(it);
     if(!DATA.api){ var w=wa("Oi! Vi a lista de presentes e vou dar: "+it.name+" 🎁"); if(w) window.open(w,"_blank"); return; }
     if(max<1){ toast("Este presente já foi escolhido."); return; }
-    openModal('<h3>'+esc(it.name)+'</h3>'
-      +(max>1?'<p>Ainda faltam '+max+'. Quantos você vai dar?</p><div class="stepper"><button type="button" data-step="-1" aria-label="Menos">−</button><output id="qn">1</output><button type="button" data-step="1" aria-label="Mais">+</button></div>':'<p>Confirme para reservar este presente. Ele aparece como escolhido para todos.</p>')
+    var STEP='<div class="stepper"><button type="button" data-step="-1" aria-label="Menos">−</button><output id="qn">1</output><button type="button" data-step="1" aria-label="Mais">+</button></div>';
+    var intro = gm
+      ? '<p>Cada pacote tem <b>'+it.units+' '+esc(gm.unit)+'</b>. Ainda faltam <b>'+metaLeft(gm)+' '+esc(gm.unit)+'</b>'+(it.sub?' no '+esc(it.sub.replace(/^Tamanho/,'tamanho')):'')+'. Quantos pacotes você vai dar?</p>'+STEP+'<p class="small" id="qtot" style="text-align:center"></p>'
+      : (max>1 ? '<p>Ainda faltam '+max+'. Quantos você vai dar?</p>'+STEP : '<p>Confirme para reservar este presente. Ele aparece como escolhido para todos.</p>');
+    openModal('<h3>'+esc(it.name)+'</h3>'+intro
       +whoHTML()+'<p class="err" id="rerr"></p>'
       +'<div class="col"><button class="btn btn-main" id="rgo">Confirmar</button><button class="btn btn-line" style="color:var(--muted)" data-act="close">Cancelar</button></div>');
-    $("sheet").querySelectorAll("[data-step]").forEach(function(b){ b.onclick=function(){ n=Math.min(max,Math.max(1,n+Number(b.getAttribute("data-step")))); $("qn").textContent=n; }; });
+    $("sheet").querySelectorAll("[data-step]").forEach(function(b){ b.onclick=function(){ n=Math.min(max,Math.max(1,n+Number(b.getAttribute("data-step")))); $("qn").textContent=n; showTot(); }; });
+    function showTot(){ if(gm && $("qtot")) $("qtot").textContent=n+(n>1?' pacotes':' pacote')+' = '+(n*it.units)+' '+gm.unit; }
+    showTot();
     $("rgo").onclick=function(){ sendReserve({itemId:it.id,itemName:it.name,qty:n},this,function(){
       thanks(it, DATA.address ? '<p class="small" style="margin-top:10px">Se quiser mandar direto para nós: '+esc(DATA.address)+'</p>' : '');
     }); };
@@ -517,7 +548,9 @@ label.f small{font-weight:400;color:var(--muted)}
     h+=field("f-link","Link",it.link,"(deixe vazio se não tiver)","full");
     h+='<label class="f full"><span>Link da imagem <small>(botão direito na foto do produto → "Copiar endereço da imagem")</small></span><div style="display:flex;gap:10px;align-items:center"><input id="f-img" value="'+esc(it.img)+'"><img class="imgprev" id="f-imgprev" alt=""'+(it.img?' src="'+esc(it.img)+'"':' hidden')+'></div></label>';
     h+='<label class="f full"><span>Observação <small>(tamanho, cor, marca…)</small></span><textarea id="f-note">'+esc(it.note)+'</textarea></label>';
-    h+=field("f-qty","Quantidade que preciso",it.qty,"");
+    h+='<label class="f"><span>Conta para a meta <small>(ex.: fraldas por tamanho)</small></span><select id="f-meta"><option value="">Não, é um item comum</option>'+(DATA.metas||[]).map(function(m){return '<option value="'+esc(m.id)+'"'+(it.meta===m.id?' selected':'')+'>'+esc(m.name)+'</option>';}).join("")+'</select></label>';
+    h+=field("f-units","Unidades por pacote",it.units||"","(só para itens de meta, ex.: 36)");
+    h+=field("f-qty","Quantidade que preciso",it.qty,"(itens comuns)");
     h+=field("f-got","Já recebidos fora do site",it.got,"(ex.: alguém avisou por mensagem)");
     h+='<label class="check full"><input type="checkbox" id="f-pool"'+(it.pool?' checked':'')+'> Aceitar vaquinha (várias pessoas dividem este presente pelo Pix)</label>';
     h+='<div class="fields full" id="f-poolbox"'+(it.pool?'':' hidden')+'>'+field("f-goal","Meta da vaquinha (R$)",it.goal||"","(vazio usa o preço)")+field("f-raised","Já arrecadado fora do site (R$)",it.raised||"","")+'</div>';
@@ -532,12 +565,13 @@ label.f small{font-weight:400;color:var(--muted)}
     DATA.items.forEach(function(it,i){
       var info=esc(cap(it.category))+(it.sub?' › '+esc(it.sub):'');
       if(it.pool) info+=' · vaquinha '+brl(raisedOf(it))+' de '+brl(goalOf(it));
+      else if(metaOf(it)) info+=' · '+it.units+' '+esc(metaOf(it).unit)+'/pacote'+(reserved(it)?' · '+reserved(it)+' pacote'+(reserved(it)>1?'s':'')+' pelo site':'');
       else if(!it.pixOnly) info+=' · '+(it.qty-left(it))+' de '+it.qty+' escolhido'+(it.qty-left(it)===1?'':'s')+(reserved(it)?' ('+reserved(it)+' pelo site)':'');
       var done=isDone(it);
       h+='<li class="erow">'+(it.img?'<img src="'+esc(it.img)+'" alt="">':'<span class="noth"></span>')
         +'<div class="info"><b>'+esc(it.name||"(sem nome)")+'</b><span>'+info+'</span>'+(done?'<span class="pill ok">Escolhido</span>':'')+'</div>'
         +'<div class="btns">'
-        +(!it.pool&&!it.pixOnly?'<button class="btn btn-soft btn-sm" data-ed="minus" data-i="'+i+'" title="Tirar 1 dos recebidos fora do site">−1</button><button class="btn btn-soft btn-sm" data-ed="plus" data-i="'+i+'" title="Recebi mais 1 fora do site">+1</button>':'')
+        +(!it.pool&&!it.pixOnly&&!metaOf(it)?'<button class="btn btn-soft btn-sm" data-ed="minus" data-i="'+i+'" title="Tirar 1 dos recebidos fora do site">−1</button><button class="btn btn-soft btn-sm" data-ed="plus" data-i="'+i+'" title="Recebi mais 1 fora do site">+1</button>':'')
         +'<button class="btn btn-soft btn-sm" data-ed="up" data-i="'+i+'" aria-label="Subir">↑</button>'
         +'<button class="btn btn-soft btn-sm" data-ed="down" data-i="'+i+'" aria-label="Descer">↓</button>'
         +'<button class="btn btn-soft btn-sm" data-ed="edit" data-i="'+i+'">Editar</button>'
@@ -559,7 +593,8 @@ label.f small{font-weight:400;color:var(--muted)}
         h+='<ul class="inbox">';
         inbox.slice().reverse().forEach(function(r){
           var off=r.status==="cancelada";
-          var what=esc(r.item||r.itemId)+(r.qty>1?' · '+r.qty+' unidades':'')+(r.amount>0?' · '+brl(r.amount):'');
+          var ri=find(r.itemId), rm=metaOf(ri);
+          var what=esc(r.item||r.itemId)+(rm&&r.qty?' · '+r.qty+' pacote'+(r.qty>1?'s':'')+' ('+(r.qty*ri.units)+' '+esc(rm.unit)+')':(r.qty>1?' · '+r.qty+' unidades':''))+(r.amount>0?' · '+brl(r.amount):'');
           h+='<li class="'+(off?'off':'')+'"><div class="who"><b>'+esc(r.name)+'</b> <span class="when">'+fmtDate(r.date)+(off?' · cancelado':'')+'</span><p class="it">'+what+'</p>'+(r.message?'<p class="msg">'+esc(r.message)+'</p>':'')+'</div>'
             +'<button class="btn btn-sm '+(off?'btn-soft':'btn-danger')+'" data-ed="'+(off?'restore':'cancelres')+'" data-rid="'+esc(r.id)+'">'+(off?'Reativar':'Cancelar')+'</button></li>';
         });
@@ -587,6 +622,15 @@ label.f small{font-weight:400;color:var(--muted)}
       +field("g-holder","Nome do titular",p.holder,"")
       +field("g-city","Cidade do titular",p.city,"(usada no QR code)")
       +'</div><p class="meta" style="margin-top:10px">Faça um Pix de teste de R$ 1 pelo QR code antes de compartilhar, para confirmar que cai na sua conta.</p></section>';
+    h+='<section class="panel metas"><h3>Metas por quantidade</h3><p class="meta" style="margin-bottom:8px">Os pacotes escolhidos somam as unidades. Quando a soma chegar na meta mínima, todos os itens daquela meta ficam indisponíveis. Em “Já tenho”, coloque o que você já tem em casa.</p>'
+      +(DATA.metas||[]).map(function(m,i){ return '<div class="row3">'
+        +'<label class="f"><span>Nome</span><input data-meta="'+i+'" data-k="name" value="'+esc(m.name)+'"></label>'
+        +'<label class="f"><span>Meta mínima</span><input data-meta="'+i+'" data-k="min" inputmode="numeric" value="'+m.min+'"></label>'
+        +'<label class="f"><span>Até</span><input data-meta="'+i+'" data-k="max" inputmode="numeric" value="'+m.max+'"></label>'
+        +'<label class="f"><span>Já tenho</span><input data-meta="'+i+'" data-k="have" inputmode="numeric" value="'+m.have+'"></label>'
+        +'<label class="f"><span>Faltam</span><input disabled value="'+metaLeft(m)+'"></label>'
+        +'<button class="btn btn-danger btn-sm" data-ed="delmeta" data-i="'+i+'">Excluir</button></div>'; }).join("")
+      +'<div class="formbtns"><button class="btn btn-soft" data-ed="addmeta">Adicionar meta</button></div></section>';
     h+='<section class="panel" id="ed-form"><h3>'+(cur?'Editando: '+esc(cur.name):'Adicionar item')+'</h3>'+formHTML(cur||blankItem())+'</section>';
     h+='<section class="panel"><h3>Itens da lista ('+DATA.items.length+')</h3><p class="meta" style="margin-bottom:8px">Os presentes escolhidos pelo site já entram na conta sozinhos. Use <b>+1</b> só para algo que você recebeu fora do site.</p>'+listHTML()+'</section>';
     return h+'</div>';
@@ -596,6 +640,7 @@ label.f small{font-weight:400;color:var(--muted)}
     var binds={"g-name":function(v){DATA.babyName=v;},"g-wa":function(v){DATA.whatsapp=v;},"g-intro":function(v){DATA.intro=v;},"g-amz":function(v){DATA.amazonList=v.trim();},"g-api":function(v){DATA.api=v.trim();},"g-addr":function(v){DATA.address=v.trim();},
       "g-key":function(v){DATA.pix.key=v.trim();},"g-holder":function(v){DATA.pix.holder=v;},"g-city":function(v){DATA.pix.city=v;}};
     Object.keys(binds).forEach(function(id){ $(id).addEventListener("input",function(){ binds[id](this.value); mark(); }); });
+    $("editor").querySelectorAll("[data-meta]").forEach(function(inp){ inp.addEventListener("change",function(){ var m=DATA.metas[Number(this.getAttribute("data-meta"))], k=this.getAttribute("data-k"); m[k]= k==="name"? this.value.trim() : Math.max(0,parseInt(this.value,10)||0); if(m.max<m.min) m.max=m.min; mark(); drawEditor(); }); });
     $("f-pool").addEventListener("change",function(){ $("f-poolbox").hidden=!this.checked; });
     $("f-img").addEventListener("input",function(){ var im=$("f-imgprev"); var v=this.value.trim(); if(v){im.src=v;im.hidden=false;}else im.hidden=true; });
   }
@@ -610,6 +655,7 @@ label.f small{font-weight:400;color:var(--muted)}
   function readForm(it){
     it.name=$("f-name").value.trim(); it.category=$("f-cat").value.trim(); it.sub=$("f-sub").value.trim(); it.price=$("f-price").value.trim();
     it.link=$("f-link").value.trim(); it.store=$("f-store").value.trim(); it.img=$("f-img").value.trim(); it.note=$("f-note").value.trim();
+    it.meta=$("f-meta").value; it.units=Math.max(0,parseInt($("f-units").value,10)||0);
     it.qty=Math.max(1,parseInt($("f-qty").value,10)||1); it.got=Math.max(0,parseInt($("f-got").value,10)||0);
     it.pool=$("f-pool").checked; it.goal=num($("f-goal").value); it.raised=num($("f-raised").value);
     it.pixOnly=$("f-pixonly").checked; it.taken=$("f-taken").checked;
@@ -630,6 +676,8 @@ label.f small{font-weight:400;color:var(--muted)}
     if(act==="close"){ $("editor").hidden=true; document.body.style.overflow=""; editingId=null; return; }
     if(act==="download"){ download(); return; }
     if(act==="inbox"){ loadInbox(); return; }
+    if(act==="addmeta"){ DATA.metas.push(normMeta({name:"Nova meta",unit:"unidades"})); mark(); drawEditor(); return; }
+    if(act==="delmeta"){ var dm=DATA.metas[i]; if(confirm('Excluir a meta "'+dm.name+'"? Os itens dela voltam a ser itens comuns.')){ DATA.items.forEach(function(x){ if(x.meta===dm.id) x.meta=""; }); DATA.metas.splice(i,1); mark(); drawEditor(); } return; }
     if(act==="cancelres"||act==="restore"){
       var rid=b.getAttribute("data-rid"); if(act==="cancelres" && !confirm("Cancelar este registro? O presente volta a ficar disponível no site.")) return;
       b.disabled=true;
