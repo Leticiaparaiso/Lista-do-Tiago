@@ -617,7 +617,7 @@ label.f small{font-weight:400;color:var(--muted)}
   function editorHTML(){
     var p=DATA.pix||{};
     var cur = editingId ? find(editingId) : null;
-    var h='<div class="ed-top"><div class="wrap"><h2>Editar lista</h2><button class="btn btn-soft" data-ed="close">Fechar</button><button class="btn btn-main" data-ed="download">Baixar lista.json</button></div></div><div class="ed">';
+    var h='<div class="ed-top"><div class="wrap"><h2>Editar lista</h2><button class="btn btn-soft" data-ed="logout" title="Esquecer a senha neste aparelho">Sair</button><button class="btn btn-soft" data-ed="close">Fechar</button><button class="btn btn-main" data-ed="download">Baixar lista.json</button></div></div><div class="ed">';
     h+='<div class="notice">Mudanças nos itens só vão para o site quando você tocar em <b>Baixar lista.json</b> e enviar o arquivo para o GitHub. Os presentes e recados dos convidados chegam sozinhos, sem precisar fazer nada.</div>';
     h+=inboxHTML();
     h+='<section class="panel"><h3>Página</h3><div class="fields">'
@@ -686,6 +686,7 @@ label.f small{font-weight:400;color:var(--muted)}
     var act=b.getAttribute("data-ed"), i=Number(b.getAttribute("data-i")), L=DATA.items;
     if(act==="close"){ $("editor").hidden=true; document.body.style.overflow=""; editingId=null; return; }
     if(act==="download"){ download(); return; }
+    if(act==="logout"){ store("lista_admkey",null); unlocked=false; inbox=null; $("editor").hidden=true; document.body.style.overflow=""; toast("Você saiu da área de edição."); return; }
     if(act==="inbox"){ loadInbox(); return; }
     if(act==="addmeta"){ DATA.metas.push(normMeta({name:"Nova meta",unit:"unidades"})); mark(); drawEditor(); return; }
     if(act==="delmeta"){ var dm=DATA.metas[i]; if(confirm('Excluir a meta "'+dm.name+'"? Os itens dela voltam a ser itens comuns.')){ DATA.items.forEach(function(x){ if(x.meta===dm.id) x.meta=""; }); DATA.metas.splice(i,1); mark(); drawEditor(); } return; }
@@ -711,7 +712,23 @@ label.f small{font-weight:400;color:var(--muted)}
     if(act==="plus"){ L[i].got=Math.min(L[i].qty,L[i].got+1); mark(); drawEditor(); return; }
     if(act==="minus"){ L[i].got=Math.max(0,L[i].got-1); mark(); drawEditor(); return; }
   });
-  function openEditor(){ drawEditor(); $("editor").hidden=false; document.body.style.overflow="hidden"; if(DATA.api && store("lista_admkey") && !inbox) loadInbox(); }
+  var unlocked=false;
+  function showEditor(){ drawEditor(); $("editor").hidden=false; document.body.style.overflow="hidden"; if(DATA.api && store("lista_admkey") && !inbox) loadInbox(); }
+  function openEditor(){
+    if(unlocked || !DATA.api){ showEditor(); return; }
+    openModal('<h3>Área de edição</h3><p>Digite a senha da planilha para entrar.</p>'
+      +'<label class="f"><span>Senha</span><input id="lk" type="password" autocomplete="current-password" value="'+esc(store("lista_admkey"))+'"></label>'
+      +'<p class="err" id="lkerr"></p><div class="col"><button class="btn btn-main" id="lkgo">Entrar</button><button class="btn btn-line" style="color:var(--muted)" data-act="close">Cancelar</button></div>');
+    function go(){
+      var k=$("lk").value, btn=$("lkgo"); if(!k){ $("lkerr").textContent="Digite a senha."; return; }
+      btn.disabled=true; btn.textContent="Verificando…";
+      api({action:"list",key:k}).then(function(r){
+        if(r && r.ok){ unlocked=true; store("lista_admkey",k); inbox=r.rows||[]; closeModal(); showEditor(); }
+        else { $("lkerr").textContent=(r&&r.error)||"Senha incorreta."; btn.disabled=false; btn.textContent="Entrar"; }
+      }).catch(function(){ $("lkerr").textContent="Não consegui verificar a senha agora. Tente de novo."; btn.disabled=false; btn.textContent="Entrar"; });
+    }
+    $("lkgo").onclick=go; $("lk").addEventListener("keydown",function(e){ if(e.key==="Enter") go(); });
+  }
   $("editfab").addEventListener("click",openEditor);
   document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ if(!$("modal").hidden) closeModal(); else if(!$("editor").hidden){ $("editor").hidden=true; document.body.style.overflow=""; } } });
   window.addEventListener("beforeunload",function(e){ if(isOwner && dirty){ e.preventDefault(); e.returnValue=""; } });
