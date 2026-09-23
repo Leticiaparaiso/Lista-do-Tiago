@@ -27,13 +27,15 @@
       "goal": 289,
       "raised": 0,
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Aparelho de ruído branco com 20 sons",
       "category": "Sono",
       "price": "R$ 90,00",
-      "link": "br.shp.ee/iNxvmqw2",
+      "link": "https://br.shp.ee/iNxvmqw2",
       "store": "Amazon",
       "img": "https://m.media-amazon.com/images/I/31QOtF7YbqL._AC_SL400_.jpg",
       "note": "",
@@ -45,7 +47,9 @@
       "raised": 0,
       "id": "a01",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "id": "l1",
@@ -63,7 +67,9 @@
       "goal": 0,
       "raised": 0,
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "id": "imudz2me6t3fx",
@@ -81,7 +87,9 @@
       "goal": 1400,
       "raised": 0,
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Protetor de colchão impermeável para berço",
@@ -99,7 +107,9 @@
       "raised": 0,
       "id": "a05",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Colchonete para berço Cosco Kids",
@@ -117,7 +127,9 @@
       "raised": 0,
       "id": "a06",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "id": "mosq1",
@@ -135,7 +147,9 @@
       "pixOnly": false,
       "goal": 0,
       "raised": 0,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "id": "lencol-solteiro",
@@ -153,7 +167,9 @@
       "pixOnly": false,
       "goal": 0,
       "raised": 0,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "id": "lencol-berco",
@@ -171,7 +187,9 @@
       "pixOnly": false,
       "goal": 0,
       "raised": 0,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Gel Lavante Suave Mustela 750 ml",
@@ -189,7 +207,9 @@
       "raised": 0,
       "id": "a07",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Refil Gel Lavante Suave Mustela 400 ml",
@@ -207,7 +227,9 @@
       "raised": 0,
       "id": "a08",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Hidratante Mustela Hydra Bebê 500 ml",
@@ -225,7 +247,9 @@
       "raised": 0,
       "id": "a09",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Almofada de banho para bebê",
@@ -243,7 +267,9 @@
       "raised": 0,
       "id": "a10",
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "name": "Fralda Huggies Premium Natural Care P",
@@ -261,7 +287,9 @@
       "raised": 0,
       "id": "a11",
       "pixOnly": false,
-      "sub": "Tamanho P"
+      "sub": "Tamanho P",
+      "meta": "fr-p",
+      "units": 36
     },
     {
       "name": "Fralda Pampers Confort Sec P",
@@ -279,7 +307,9 @@
       "raised": 0,
       "id": "a12",
       "pixOnly": false,
-      "sub": "Tamanho P"
+      "sub": "Tamanho P",
+      "meta": "fr-p",
+      "units": 72
     },
     {
       "name": "Fralda Pampers Premium Care P",
@@ -297,7 +327,9 @@
       "raised": 0,
       "id": "a14",
       "pixOnly": false,
-      "sub": "Tamanho P"
+      "sub": "Tamanho P",
+      "meta": "fr-p",
+      "units": 40
     },
     {
       "name": "Fralda Pampers Premium Care Pants M",
@@ -315,7 +347,9 @@
       "raised": 0,
       "id": "a15",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 34
     },
     {
       "name": "Fralda Pampers Confort Sec M",
@@ -333,7 +367,9 @@
       "raised": 0,
       "id": "a16",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 44
     },
     {
       "name": "Fralda Pampers Confort Sec M (pacotão)",
@@ -351,7 +387,9 @@
       "raised": 0,
       "id": "a17",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 196
     },
     {
       "name": "Fralda Pampers Premium Care Pants M",
@@ -369,7 +407,9 @@
       "raised": 0,
       "id": "a18",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 78
     },
     {
       "name": "Fralda Pampers Premium Care Pants M",
@@ -387,7 +427,9 @@
       "raised": 0,
       "id": "a19",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 124
     },
     {
       "name": "Fralda Pampers Premium Care M - 34 unid",
@@ -405,7 +447,9 @@
       "raised": 0,
       "id": "a20",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 34
     },
     {
       "name": "Fralda Pampers Premium Care M - 160 unid",
@@ -423,7 +467,9 @@
       "raised": 0,
       "id": "a21",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 160
     },
     {
       "name": "Fralda Personal Baby Premium Pants M",
@@ -441,7 +487,9 @@
       "raised": 0,
       "id": "a22",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 70
     },
     {
       "name": "Fralda Personal Baby Premium Pants M",
@@ -459,7 +507,9 @@
       "raised": 0,
       "id": "a23",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 48
     },
     {
       "name": "Fralda Personal Baby Premium Protection M",
@@ -477,7 +527,9 @@
       "raised": 0,
       "id": "a24",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 62
     },
     {
       "name": "Fralda Personal Baby Premium Protection M",
@@ -495,7 +547,9 @@
       "raised": 0,
       "id": "a25",
       "pixOnly": false,
-      "sub": "Tamanho M"
+      "sub": "Tamanho M",
+      "meta": "fr-m",
+      "units": 34
     },
     {
       "name": "Fralda Pampers Confort Sec G",
@@ -513,7 +567,9 @@
       "raised": 0,
       "id": "a26",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 128
     },
     {
       "name": "Fralda Pampers Pants Ajuste Total G",
@@ -531,7 +587,9 @@
       "raised": 0,
       "id": "a27",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 144
     },
     {
       "name": "Fralda Pampers Premium Care Pants G",
@@ -549,7 +607,9 @@
       "raised": 0,
       "id": "a28",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 112
     },
     {
       "name": "Fralda Pampers Premium Care Pants G",
@@ -567,7 +627,9 @@
       "raised": 0,
       "id": "a29",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 68
     },
     {
       "name": "Fralda Huggies Supreme Care G",
@@ -585,7 +647,9 @@
       "raised": 0,
       "id": "a30",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 64
     },
     {
       "name": "Fralda Huggies Máxima Proteção G",
@@ -603,7 +667,9 @@
       "raised": 0,
       "id": "a31",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 32
     },
     {
       "name": "Fralda Huggies Máxima Proteção G",
@@ -621,7 +687,9 @@
       "raised": 0,
       "id": "a32",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 66
     },
     {
       "name": "Fralda Huggies Máxima Proteção G (pacotão)",
@@ -639,7 +707,9 @@
       "raised": 0,
       "id": "a33",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 160
     },
     {
       "name": "Fralda Personal Baby Premium Pants G",
@@ -657,7 +727,9 @@
       "raised": 0,
       "id": "a34",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 62
     },
     {
       "name": "Fralda Personal Baby Premium Protection G",
@@ -675,7 +747,9 @@
       "raised": 0,
       "id": "a35",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 56
     },
     {
       "name": "Fralda Personal Baby Premium Protection G",
@@ -693,7 +767,9 @@
       "raised": 0,
       "id": "a36",
       "pixOnly": false,
-      "sub": "Tamanho G"
+      "sub": "Tamanho G",
+      "meta": "fr-g",
+      "units": 30
     },
     {
       "id": "imue08tavum2j",
@@ -711,7 +787,9 @@
       "goal": 1399,
       "raised": 0,
       "pixOnly": false,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
     },
     {
       "id": "imudznzsoivaw",
@@ -729,7 +807,35 @@
       "pixOnly": true,
       "goal": 0,
       "raised": 0,
-      "sub": ""
+      "sub": "",
+      "meta": "",
+      "units": 0
+    }
+  ],
+  "metas": [
+    {
+      "id": "fr-p",
+      "name": "Fraldas P",
+      "unit": "fraldas",
+      "min": 300,
+      "max": 350,
+      "have": 0
+    },
+    {
+      "id": "fr-m",
+      "name": "Fraldas M",
+      "unit": "fraldas",
+      "min": 500,
+      "max": 600,
+      "have": 266
+    },
+    {
+      "id": "fr-g",
+      "name": "Fraldas G",
+      "unit": "fraldas",
+      "min": 500,
+      "max": 550,
+      "have": 0
     }
   ]
 }
