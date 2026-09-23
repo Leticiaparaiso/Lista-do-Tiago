@@ -1,0 +1,39 @@
+{
+  "babyName": "Nome do bebê",
+  "intro": "Oi! Muita gente tem perguntado o que dar de presente, então juntei aqui as coisas que vão ajudar de verdade. Qualquer carinho já é muito bem-vindo.",
+  "whatsapp": "",
+  "pix": {
+    "key": "",
+    "holder": "",
+    "city": "Fortaleza"
+  },
+  "amazonList": "https://www.amazon.com.br/baby-reg/tiago-paraisomaia-novembro-2026-fortaleza/3DNDUY1ACTY87",
+  "items": [
+    {
+      "id": "p1",
+      "name": "PUPA Pluma Aqua, tamanho M",
+      "category": "Sono",
+      "note": "Swaddle quentinho. Por favor escolher o tamanho M.",
+      "store": "Bebê Pupa",
+      "price": "R$ 289",
+      "link": "https://www.bebepupa.com.br/produtos/pupa-pluma-aqua/",
+      "taken": false,
+      "pool": true,
+      "goal": 289,
+      "raised": 0
+    },
+    {
+      "id": "l1",
+      "name": "Luminária orgânica de pé em madeira",
+      "category": "Quarto",
+      "note": "Na cor clara.",
+      "store": "Mercado Livre",
+      "price": "",
+      "link": "https://www.mercadolivre.com.br/luminaria-organica-pe-em-madeira-abajur-decorativo-luxo/up/MLBU4627647986?pdp_filters=item_id%3AMLB7349075524",
+      "taken": false,
+      "pool": false,
+      "goal": 0,
+      "raised": 0
+    }
+  ]
+}

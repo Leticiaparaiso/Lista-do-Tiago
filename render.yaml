@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: lista-presentes
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    headers:
+      - path: /lista.json
+        name: Cache-Control
+        value: no-cache

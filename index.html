@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lista de presentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#F2F4FA; --paper:#FFFFFF; --ink:#23284C; --muted:#646A8C; --line:#DADEEE;
+  --accent:#5E6BE8; --accent-ink:#FFFFFF; --peach:#FBD5BD; --peach-ink:#7A3E1C;
+  --ok:#2F8C68; --ok-bg:#DDF1E8; --shadow:0 1px 0 rgba(35,40,76,.06);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15172A; --paper:#1E2138; --ink:#ECEEFB; --muted:#A3A8C8; --line:#33375A;
+    --accent:#8C96FF; --accent-ink:#15172A; --peach:#5A3A2A; --peach-ink:#FFD9C2;
+    --ok:#7FD6B0; --ok-bg:#1F3A31; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15172A; --paper:#1E2138; --ink:#ECEEFB; --muted:#A3A8C8; --line:#33375A;
+  --accent:#8C96FF; --accent-ink:#15172A; --peach:#5A3A2A; --peach-ink:#FFD9C2;
+  --ok:#7FD6B0; --ok-bg:#1F3A31; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 Figtree,"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px 80px}
+h1,h2,.serif{font-family:"Young Serif",Georgia,"Times New Roman",serif;font-weight:400}
+header.hero{padding:56px 0 28px;text-align:left}
+.hero .small{color:var(--muted);font-size:1rem;margin:0 0 6px}
+.hero h1{font-size:clamp(2.6rem,9vw,4.4rem);line-height:1.02;margin:0 0 18px;letter-spacing:-.01em;word-break:break-word}
+.hero p.msg{max-width:52ch;margin:0;color:var(--ink);font-size:1.08rem;white-space:pre-line}
+.mobile{display:block;width:100%;height:auto}
+/* Pix */
+.pix{margin:28px 0 40px;background:var(--peach);color:var(--peach-ink);border-radius:28px;padding:24px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.pix h2{font-size:1.5rem;margin:0 0 6px;color:inherit}
+.pix p{margin:0 0 14px;font-size:.98rem}
+.pix .key{font-weight:600;word-break:break-all;background:rgba(255,255,255,.55);border-radius:12px;padding:10px 12px;margin:0 0 12px;color:var(--peach-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pix .key{background:rgba(0,0,0,.25)}}
+:root[data-theme="dark"] .pix .key{background:rgba(0,0,0,.25)}
+.pix .holder{font-size:.9rem;margin:0 0 14px;opacity:.85}
+.qr{background:#fff;padding:10px;border-radius:16px;line-height:0}
+.qr img,.qr canvas{width:132px;height:132px}
+.pix .btns{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:560px){.pix{grid-template-columns:1fr}.qr{justify-self:start}}
+/* buttons */
+button,.btn{font:600 .95rem/1 Figtree,system-ui,sans-serif;border:0;border-radius:999px;padding:12px 18px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;min-height:44px}
+.btn-main{background:var(--accent);color:var(--accent-ink)}
+.btn-soft{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.pix .btn-soft{color:var(--peach-ink);box-shadow:inset 0 0 0 1.5px currentColor}
+.btn-dark{background:var(--peach-ink);color:var(--peach)}
+button:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+/* list */
+.listhead{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.listhead h2{font-size:1.9rem;margin:0}
+.filter{display:flex;gap:4px;background:var(--paper);border-radius:999px;padding:4px;box-shadow:inset 0 0 0 1px var(--line)}
+.filter button{min-height:36px;padding:8px 14px;background:transparent;color:var(--muted)}
+.filter button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.cat{font-size:1rem;color:var(--muted);font-weight:600;margin:28px 0 4px}
+ul.items{list-style:none;margin:0;padding:0}
+li.item{display:grid;grid-template-columns:1fr auto;gap:10px 16px;padding:18px 0;border-bottom:1px solid var(--line);align-items:center}
+li.item:first-child{border-top:1px solid var(--line)}
+.item .name{font-weight:600;font-size:1.08rem;margin:0}
+.item .meta{color:var(--muted);font-size:.93rem;margin:2px 0 0}
+.item .note{font-size:.95rem;margin:4px 0 0}
+.item .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.item.taken .name{text-decoration:line-through;text-decoration-thickness:1.5px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;background:var(--ok-bg);color:var(--ok);font-weight:600;font-size:.88rem;border-radius:999px;padding:8px 14px}
+@media (max-width:560px){li.item{grid-template-columns:1fr}.item .actions{justify-content:flex-start}}
+.empty{padding:32px 0;color:var(--muted)}
+.notice{background:var(--paper);border:1.5px dashed var(--line);border-radius:20px;padding:18px;margin:24px 0;color:var(--muted)}
+footer{margin-top:48px;color:var(--muted);font-size:.9rem}
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:600;transition:.2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+/* owner editor */
+.editfab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;box-shadow:0 6px 20px rgba(35,40,76,.25)}
+.editor{position:fixed;inset:0;background:var(--bg);z-index:40;overflow:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.editor[hidden]{display:none}
+.editor .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:2}
+.editor .bar .in{max-width:720px;margin:0 auto;padding:12px 20px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.editor .bar strong{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.3rem}
+.editor section{background:var(--paper);border-radius:20px;padding:20px;margin:18px 0;box-shadow:inset 0 0 0 1px var(--line)}
+.editor h3{margin:0 0 12px;font-size:1.1rem}
+label{display:block;font-weight:600;font-size:.92rem;margin:12px 0 4px}
+.hint{font-weight:400;color:var(--muted);font-size:.85rem}
+input,textarea,select{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{min-height:80px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.eitem{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.eitem:last-child{border-bottom:0}
+.eitem .t{min-width:0}
+.eitem .t b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eitem .t span{color:var(--muted);font-size:.85rem}
+.eitem .b{display:flex;gap:6px;flex-shrink:0}
+.eitem .b button{min-height:38px;padding:8px 12px;font-size:.85rem}
+.check{display:flex;align-items:center;gap:8px;font-weight:600;margin-top:14px}
+.check input{width:auto}
+/* vaquinha */
+.pool{margin-top:10px;max-width:340px}
+.pool .bar{height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+.pool .fill{height:100%;background:var(--accent);border-radius:999px}
+.pool .txt{font-size:.88rem;color:var(--muted);margin-top:5px}
+.tag{display:inline-block;font-size:.78rem;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);border-radius:999px;padding:3px 9px;margin-left:6px;vertical-align:2px}
+.amz{margin:36px 0 0;padding:20px;border-radius:20px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.amz p{margin:0;max-width:40ch}
+.modal{position:fixed;inset:0;z-index:45;background:rgba(20,22,40,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.modal[hidden]{display:none}
+.sheet{background:var(--paper);color:var(--ink);width:100%;max-width:460px;border-radius:24px;padding:22px;max-height:calc(100% - 20px);overflow:auto}
+@media (min-width:600px){.modal{align-items:center}}
+.sheet h2{font-size:1.45rem;margin:0 0 4px}
+.sheet .sub{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0}
+.chips button{min-height:40px;padding:8px 14px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:none}
+.money{position:relative}
+.money span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
+.money input{padding-left:40px;font-weight:600}
+.payout{margin-top:18px;display:grid;gap:12px;justify-items:start}
+.payout .qr img,.payout .qr canvas{width:180px;height:180px}
+.sheet .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.sheet .close{margin-top:18px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="btn btn-main editfab" id="editfab" hidden>Editar lista</button>
+<div class="editor" id="editor" hidden></div>
+
+
+
+<script>
+(function(){
+  "use strict";
+  var DATA = {babyName:"",intro:"",whatsapp:"",amazonList:"",pix:{key:"",holder:"",city:""},items:[]};
+  function setData(d){ DATA = d || DATA; DATA.pix = DATA.pix || {key:"",holder:"",city:""}; DATA.items = DATA.items || []; }
+
+  var filter = "todos";
+  var root = document.getElementById("root");
+  var isOwner = /[?&]editar\b/.test(location.search);
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function brl(n){ n = Number(n)||0; return "R$ " + n.toLocaleString("pt-BR",{minimumFractionDigits: n%1?2:0, maximumFractionDigits:2}); }
+  function safeUrl(u){ u = String(u||"").trim(); if(!u) return ""; if(!/^https?:\/\//i.test(u)) u = "https://" + u; return u; }
+  function toast(msg){ var t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove("show");},2200); }
+  function copy(text, okMsg){
+    function fallback(){ var ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy"); toast(okMsg);}catch(e){toast("Não deu para copiar. Selecione e copie manualmente.");} ta.remove(); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){toast(okMsg);}, fallback); } else fallback();
+  }
+
+  /* ---------- Pix "copia e cola" (BR Code estático, sem valor) ---------- */
+  function norm(s,max){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^A-Za-z0-9 ]/g,"").trim().toUpperCase().slice(0,max); }
+  function tlv(id,v){ var l=String(v.length); if(l.length<2) l="0"+l; return id+l+v; }
+  function crc16(str){ var crc=0xFFFF; for(var i=0;i<str.length;i++){ crc^=str.charCodeAt(i)<<8; for(var j=0;j<8;j++){ crc=(crc&0x8000)?((crc<<1)^0x1021):(crc<<1); crc&=0xFFFF; } } var h=crc.toString(16).toUpperCase(); while(h.length<4) h="0"+h; return h; }
+  function pixKeyClean(k){
+    k = String(k||"").trim();
+    if(/@/.test(k)) return k.toLowerCase();
+    var digits = k.replace(/\D/g,"");
+    if(/^\+/.test(k)) return "+"+digits;
+    if(/^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(k)) return k.toLowerCase();
+    if(digits.length===11 || digits.length===14) return digits; // CPF ou CNPJ
+    return k;
+  }
+  function brcode(p, amount){
+    var key = pixKeyClean(p.key), name = norm(p.holder,25) || "RECEBEDOR", city = norm(p.city,15) || "BRASIL";
+    if(!key) return "";
+    var mai = tlv("00","br.gov.bcb.pix") + tlv("01",key);
+    var amt = (amount && amount>0) ? tlv("54", amount.toFixed(2)) : "";
+    var payload = tlv("00","01") + tlv("26",mai) + tlv("52","0000") + tlv("53","986") + amt + tlv("58","BR") + tlv("59",name) + tlv("60",city) + tlv("62",tlv("05","***")) + "6304";
+    return payload + crc16(payload);
+  }
+
+  /* ---------- Página pública ---------- */
+  function waLink(item){
+    var n = String(DATA.whatsapp||"").replace(/\D/g,"");
+    if(!n) return "";
+    if(n.length<=11) n = "55"+n;
+    var txt = "Oi! Vi a lista de presentes e quero dar: " + item.name + " 🎁";
+    return "https://wa.me/"+n+"?text="+encodeURIComponent(txt);
+  }
+
+  function render(){
+    var name = DATA.babyName || "Nosso bebê";
+    document.title = "Lista de presentes · " + name;
+    var h = "";
+    h += '<header class="hero"><p class="small">Lista de presentes de</p><h1>'+esc(name)+'</h1>';
+    if(DATA.intro) h += '<p class="msg">'+esc(DATA.intro)+'</p>';
+    h += '</header>';
+
+    // Pix
+    if(DATA.pix.key){
+      h += '<section class="pix" aria-labelledby="pixt"><div>';
+      h += '<h2 id="pixt">Prefere mandar um Pix?</h2>';
+      h += '<p>Qualquer valor ajuda. O Pix vai direto para a minha conta, sem taxa.</p>';
+      h += '<div class="key">'+esc(DATA.pix.key)+'</div>';
+      if(DATA.pix.holder) h += '<p class="holder">Em nome de '+esc(DATA.pix.holder)+'</p>';
+      h += '<div class="btns"><button class="btn btn-dark" data-act="copykey">Copiar chave</button>';
+      h += '<button class="btn btn-soft" data-act="copycode">Copiar Pix copia e cola</button></div>';
+      h += '</div><div class="qr" id="qr" aria-label="QR code do Pix"></div></section>';
+    } else if(isOwner) {
+      h += '<div class="notice">Sua chave Pix ainda não foi cadastrada. Toque em <b>Editar lista</b> para adicionar.</div>';
+    }
+
+    // Lista
+    var items = DATA.items.filter(function(i){ return filter==="todos" || !i.taken; });
+    h += '<div class="listhead"><h2>O que ele precisa</h2>';
+    h += '<div class="filter" role="group" aria-label="Filtrar"><button data-f="todos" aria-pressed="'+(filter==="todos")+'">Todos</button><button data-f="livres" aria-pressed="'+(filter==="livres")+'">Ainda disponíveis</button></div></div>';
+    if(!items.length){
+      h += '<p class="empty">'+(DATA.items.length ? "Todos os itens já foram escolhidos. Um Pix de qualquer valor também ajuda muito!" : "A lista ainda está vazia.")+'</p>';
+    } else {
+      var cats = [], byCat = {};
+      items.forEach(function(i){ var c=(i.category||"").trim()||"Outros"; if(!byCat[c]){byCat[c]=[];cats.push(c);} byCat[c].push(i); });
+      var showCats = cats.length>1;
+      cats.forEach(function(c){
+        if(showCats) h += '<h3 class="cat">'+esc(c)+'</h3>';
+        h += '<ul class="items">';
+        byCat[c].forEach(function(i){
+          var meta = [i.store, i.price].filter(Boolean).map(esc).join(", ");
+          h += '<li class="item'+(i.taken?' taken':'')+'"><div>';
+          var pool = i.pool && DATA.pix.key;
+          var goal = Number(i.goal)||0, raised = Number(i.raised)||0, full = goal>0 && raised>=goal;
+          h += '<p class="name">'+esc(i.name)+(pool&&!i.taken?'<span class="tag">Vaquinha</span>':'')+'</p>';
+          if(meta) h += '<p class="meta">'+meta+'</p>';
+          if(i.note) h += '<p class="note">'+esc(i.note)+'</p>';
+          if(pool && !i.taken && (goal>0 || raised>0)){
+            var pct = goal>0 ? Math.min(100, Math.round(raised/goal*100)) : 0;
+            h += '<div class="pool">'+(goal>0?'<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><div class="fill" style="width:'+pct+'%"></div></div>':'');
+            h += '<div class="txt">'+(goal>0 ? brl(raised)+' de '+brl(goal)+' arrecadados' : brl(raised)+' arrecadados')+'</div></div>';
+          }
+          h += '</div><div class="actions">';
+          if(i.taken || full){ h += '<span class="badge">'+(full && !i.taken ? "Meta atingida" : "Já escolhido")+'</span>'; }
+          else {
+            var u = safeUrl(i.link), w = waLink(i);
+            if(u) h += '<a class="btn btn-soft" href="'+esc(u)+'" target="_blank" rel="noopener">Ver na loja</a>';
+            if(w) h += '<a class="btn '+(pool?'btn-soft':'btn-main')+'" href="'+esc(w)+'" target="_blank" rel="noopener">'+(pool?'Vou dar inteiro':'Vou dar este')+'</a>';
+            if(pool) h += '<button class="btn btn-main" data-pool="'+esc(i.id)+'">Contribuir com uma parte</button>';
+          }
+          h += '</div></li>';
+        });
+        h += '</ul>';
+      });
+    }
+    var amz = safeUrl(DATA.amazonList);
+    if(amz) h += '<div class="amz"><p>Tem mais itens na minha lista da Amazon. Lá o site já avisa o que foi comprado.</p><a class="btn btn-soft" href="'+esc(amz)+'" target="_blank" rel="noopener">Abrir lista da Amazon</a></div>';
+    if(DATA.whatsapp) h += '<footer>Escolheu um presente ou contribuiu numa vaquinha? Me avise pelo WhatsApp pelos botões da lista, assim ninguém dá o mesmo item.</footer>';
+    root.innerHTML = h;
+
+    // QR
+    var qrEl = document.getElementById("qr"), code = brcode(DATA.pix);
+    if(qrEl && code && window.QRCode){ try{ new QRCode(qrEl,{text:code,width:264,height:264,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ qrEl.remove(); } }
+    else if(qrEl){ qrEl.remove(); }
+  }
+
+  /* ---------- Vaquinha ---------- */
+  var modal = document.createElement("div");
+  modal.className = "modal"; modal.hidden = true; modal.setAttribute("role","dialog"); modal.setAttribute("aria-modal","true");
+  document.body.appendChild(modal);
+  var poolItem = null, poolAmount = 0, lastFocus = null;
+
+  function openPool(item){
+    poolItem = item; poolAmount = 0; lastFocus = document.activeElement;
+    var goal = Number(item.goal)||0, left = goal>0 ? Math.max(0, goal-(Number(item.raised)||0)) : 0;
+    var chips = [50,100,150].filter(function(v){ return !left || v<left; });
+    if(left) chips.push(left);
+    var h = '<div class="sheet"><h2 id="pooltitle">Contribuir para: '+esc(item.name)+'</h2>';
+    h += '<p class="sub">'+(left ? 'Faltam '+brl(left)+' para completar. ' : '')+'Escolha quanto quer dar. O Pix cai direto na minha conta.</p>';
+    h += '<label for="pool-v">Valor da contribuição</label><div class="money"><span>R$</span><input id="pool-v" inputmode="decimal" placeholder="0,00" autocomplete="off"></div>';
+    h += '<div class="chips">'+chips.map(function(v){ return '<button data-v="'+v+'" aria-pressed="false">'+(v===left?'Completar ('+brl(v)+')':brl(v))+'</button>'; }).join("")+'</div>';
+    h += '<div class="payout" id="payout"></div>';
+    h += '<button class="btn btn-soft close" data-close="1">Fechar</button></div>';
+    modal.innerHTML = h; modal.setAttribute("aria-labelledby","pooltitle"); modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    document.getElementById("pool-v").focus();
+    drawPayout();
+  }
+  function closePool(){ modal.hidden = true; document.body.style.overflow = ""; if(lastFocus && lastFocus.focus) lastFocus.focus(); }
+  function parseMoney(s){ s = String(s||"").replace(/[^\d,.]/g,""); if(s.indexOf(",")>-1) s = s.replace(/\./g,"").replace(",","."); var n = parseFloat(s); return isFinite(n) ? Math.round(n*100)/100 : 0; }
+  function drawPayout(){
+    var el = document.getElementById("payout"); if(!el) return;
+    modal.querySelectorAll(".chips button").forEach(function(c){ c.setAttribute("aria-pressed", String(Number(c.dataset.v)===poolAmount)); });
+    if(!(poolAmount>0)){ el.innerHTML = '<p class="hint">Digite um valor ou escolha uma das opções acima.</p>'; return; }
+    var code = brcode(DATA.pix, poolAmount);
+    var h = '<div class="qr" id="poolqr" aria-label="QR code do Pix de '+esc(brl(poolAmount))+'"></div>';
+    h += '<div class="row"><button class="btn btn-main" data-copy="1">Copiar Pix copia e cola de '+esc(brl(poolAmount))+'</button></div>';
+    var n = String(DATA.whatsapp||"").replace(/\D/g,"");
+    if(n){ if(n.length<=11) n="55"+n; var txt = "Oi! Contribuí com "+brl(poolAmount)+" na vaquinha do presente: "+poolItem.name+" 💛"; h += '<div class="row"><a class="btn btn-soft" target="_blank" rel="noopener" href="https://wa.me/'+n+'?text='+encodeURIComponent(txt)+'">Já paguei, avisar no WhatsApp</a></div>'; }
+    el.innerHTML = h;
+    var q = document.getElementById("poolqr");
+    if(q && window.QRCode){ try{ new QRCode(q,{text:code,width:360,height:360,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ q.remove(); } } else if(q) q.remove();
+  }
+  modal.addEventListener("input", function(e){ if(e.target.id==="pool-v"){ poolAmount = parseMoney(e.target.value); clearTimeout(drawPayout._t); drawPayout._t = setTimeout(drawPayout, 350); } });
+  modal.addEventListener("click", function(e){
+    if(e.target===modal){ closePool(); return; }
+    var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.close){ closePool(); return; }
+    if(b.dataset.v){ poolAmount = Number(b.dataset.v); var inp=document.getElementById("pool-v"); inp.value = poolAmount.toFixed(2).replace(".",","); drawPayout(); return; }
+    if(b.dataset.copy) copy(brcode(DATA.pix, poolAmount), "Pix copiado. Cole no app do banco.");
+  });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape" && !modal.hidden) closePool(); });
+
+  root.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.f){ filter=b.dataset.f; render(); return; }
+    if(b.dataset.pool){ var it = DATA.items.find(function(i){ return i.id===b.dataset.pool; }); if(it) openPool(it); return; }
+    if(b.dataset.act==="copykey") copy(DATA.pix.key, "Chave Pix copiada");
+    if(b.dataset.act==="copycode") copy(brcode(DATA.pix), "Pix copia e cola copiado. Cole no app do banco.");
+  });
+
+  /* ---------- Editor (só para a dona da página) ---------- */
+  var draft = null, editingId = null;
+  var ed = document.getElementById("editor");
+  function uid(){ return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+  function openEditor(){ draft = JSON.parse(JSON.stringify(DATA)); editingId=null; renderEditor(); ed.hidden=false; document.body.style.overflow="hidden"; }
+  function closeEditor(){ ed.hidden=true; document.body.style.overflow=""; }
+
+  function itemForm(it){
+    it = it || {name:"",category:"",note:"",store:"",price:"",link:"",taken:false,pool:false,goal:0,raised:0};
+    return '<label for="f-name">Nome do item</label><input id="f-name" value="'+esc(it.name)+'" placeholder="Ex.: Carrinho de bebê">'+
+      '<div class="row2"><div><label for="f-cat">Categoria <span class="hint">(opcional)</span></label><input id="f-cat" list="cats" value="'+esc(it.category)+'" placeholder="Ex.: Passeio"></div>'+
+      '<div><label for="f-price">Preço aproximado <span class="hint">(opcional)</span></label><input id="f-price" value="'+esc(it.price)+'" placeholder="Ex.: R$ 250"></div></div>'+
+      '<div class="row2"><div><label for="f-link">Link <span class="hint">(deixe vazio se não tiver)</span></label><input id="f-link" inputmode="url" value="'+esc(it.link)+'" placeholder="https://..."></div>'+
+      '<div><label for="f-store">Loja <span class="hint">(opcional)</span></label><input id="f-store" value="'+esc(it.store)+'" placeholder="Ex.: Shopee"></div></div>'+
+      '<label for="f-note">Observação <span class="hint">(tamanho, cor, marca...)</span></label><textarea id="f-note">'+esc(it.note)+'</textarea>'+
+      '<label class="check"><input type="checkbox" id="f-pool"'+(it.pool?' checked':'')+'> Aceitar vaquinha (várias pessoas dividem este presente pelo Pix)</label>'+
+      '<div class="row2"><div><label for="f-goal">Meta da vaquinha (R$) <span class="hint">(vazio usa o preço)</span></label><input id="f-goal" inputmode="decimal" value="'+(Number(it.goal)?String(it.goal).replace(".",","):"")+'" placeholder="Ex.: 289"></div>'+
+      '<div><label for="f-raised">Já arrecadado (R$) <span class="hint">(atualize quando receber)</span></label><input id="f-raised" inputmode="decimal" value="'+(Number(it.raised)?String(it.raised).replace(".",","):"")+'" placeholder="0"></div></div>'+
+      '<label class="check"><input type="checkbox" id="f-taken"'+(it.taken?' checked':'')+'> Já foi escolhido por alguém</label>';
+  }
+
+  function renderEditor(){
+    var cats = {}; draft.items.forEach(function(i){ if(i.category) cats[i.category]=1; });
+    var editing = editingId ? draft.items.find(function(i){return i.id===editingId;}) : null;
+    var h = '<div class="bar"><div class="in"><strong>Editar lista</strong><div style="display:flex;gap:8px"><button class="btn btn-soft" data-e="cancel">Cancelar</button><button class="btn btn-main" data-e="save">Baixar lista.json</button></div></div></div>';
+    h += '<div class="wrap">';
+    h += '<p class="notice" style="margin-bottom:0">As mudanças feitas aqui ainda não vão para o site. Quando terminar, toque em <b>Baixar lista.json</b> e envie o arquivo baixado para o GitHub, substituindo o antigo. Em cerca de um minuto o site atualiza para todo mundo.</p>';
+    h += '<datalist id="cats">'+Object.keys(cats).map(function(c){return '<option value="'+esc(c)+'">';}).join("")+'</datalist>';
+
+    h += '<section><h3>Página</h3>';
+    h += '<label for="g-name">Nome do bebê</label><input id="g-name" value="'+esc(draft.babyName)+'">';
+    h += '<label for="g-intro">Mensagem de abertura</label><textarea id="g-intro">'+esc(draft.intro)+'</textarea>';
+    h += '<label for="g-wa">Seu WhatsApp <span class="hint">(com DDD; os convidados usam para avisar o que vão dar)</span></label><input id="g-wa" inputmode="tel" value="'+esc(draft.whatsapp)+'" placeholder="11 91234-5678">';
+    h += '<label for="g-amz">Link da sua lista da Amazon <span class="hint">(opcional)</span></label><input id="g-amz" inputmode="url" value="'+esc(draft.amazonList||"")+'">';
+    h += '</section>';
+
+    h += '<section><h3>Pix</h3>';
+    h += '<label for="g-key">Chave Pix <span class="hint">(celular no formato +5511912345678, CPF só números, e-mail ou chave aleatória)</span></label><input id="g-key" value="'+esc(draft.pix.key)+'">';
+    h += '<div class="row2"><div><label for="g-holder">Nome do titular</label><input id="g-holder" value="'+esc(draft.pix.holder)+'"></div>';
+    h += '<div><label for="g-city">Cidade do titular <span class="hint">(usada no QR code)</span></label><input id="g-city" value="'+esc(draft.pix.city)+'"></div></div>';
+    h += '<p class="hint" style="margin-top:12px">Faça um Pix de teste de R$ 1 pelo QR code antes de compartilhar, para confirmar que cai na sua conta.</p>';
+    h += '</section>';
+
+    h += '<section><h3>'+(editing?"Editar item":"Adicionar item")+'</h3>'+itemForm(editing);
+    h += '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-main" data-e="saveitem">'+(editing?"Salvar item":"Adicionar item")+'</button>'+(editing?'<button class="btn btn-soft" data-e="canceledit">Cancelar edição</button>':'')+'</div></section>';
+
+    h += '<section><h3>Itens da lista ('+draft.items.length+')</h3>';
+    if(!draft.items.length) h += '<p class="hint">Nenhum item ainda. Adicione o primeiro acima.</p>';
+    draft.items.forEach(function(i,idx){
+      h += '<div class="eitem"><div class="t"><b>'+esc(i.name)+'</b><span>'+esc([i.category, i.link?"com link":"sem link", i.pool?("vaquinha "+brl(i.raised)+(Number(i.goal)?" de "+brl(i.goal):"")):"", i.taken?"já escolhido":""].filter(Boolean).join(", "))+'</span></div>';
+      h += '<div class="b"><button class="btn btn-soft" data-e="up" data-id="'+i.id+'" aria-label="Subir"'+(idx===0?' disabled':'')+'>↑</button>';
+      h += '<button class="btn btn-soft" data-e="toggle" data-id="'+i.id+'">'+(i.taken?"Liberar":"Escolhido")+'</button>';
+      h += '<button class="btn btn-soft" data-e="edit" data-id="'+i.id+'">Editar</button>';
+      h += '<button class="btn btn-soft" data-e="del" data-id="'+i.id+'">Excluir</button></div></div>';
+    });
+    h += '</section></div>';
+    ed.innerHTML = h;
+  }
+
+  function readGeneral(){
+    draft.babyName = document.getElementById("g-name").value.trim();
+    draft.intro = document.getElementById("g-intro").value.trim();
+    draft.whatsapp = document.getElementById("g-wa").value.trim();
+    draft.amazonList = document.getElementById("g-amz").value.trim();
+    draft.pix = { key:document.getElementById("g-key").value.trim(), holder:document.getElementById("g-holder").value.trim(), city:document.getElementById("g-city").value.trim() };
+  }
+
+  ed.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b || !b.dataset.e) return;
+    var act = b.dataset.e, id = b.dataset.id;
+    if(act==="cancel"){ closeEditor(); return; }
+    readGeneral();
+    var idx = draft.items.findIndex(function(i){return i.id===id;});
+    if(act==="saveitem"){
+      var name = document.getElementById("f-name").value.trim();
+      if(!name){ toast("Dê um nome ao item"); document.getElementById("f-name").focus(); return; }
+      var it = { name:name, category:document.getElementById("f-cat").value.trim(), price:document.getElementById("f-price").value.trim(),
+        link:document.getElementById("f-link").value.trim(), store:document.getElementById("f-store").value.trim(),
+        note:document.getElementById("f-note").value.trim(), taken:document.getElementById("f-taken").checked,
+        pool:document.getElementById("f-pool").checked, goal:parseMoney(document.getElementById("f-goal").value), raised:parseMoney(document.getElementById("f-raised").value) };
+      if(it.pool && !it.goal) it.goal = parseMoney(it.price);
+      if(it.pool && !draft.pix.key) toast("Cadastre sua chave Pix para a vaquinha aparecer");
+      if(editingId){ var k=draft.items.findIndex(function(i){return i.id===editingId;}); it.id=editingId; draft.items[k]=it; toast("Item atualizado"); }
+      else { it.id=uid(); draft.items.push(it); toast("Item adicionado"); }
+      editingId=null;
+    }
+    if(act==="canceledit") editingId=null;
+    if(act==="edit"){ editingId=id; renderEditor(); ed.scrollTo({top:0}); var f=document.getElementById("f-name"); if(f) f.focus(); return; }
+    if(act==="del" && idx>-1){ if(confirm("Excluir “"+draft.items[idx].name+"”?")){ draft.items.splice(idx,1); if(editingId===id) editingId=null; } }
+    if(act==="toggle" && idx>-1) draft.items[idx].taken = !draft.items[idx].taken;
+    if(act==="up" && idx>0){ var t=draft.items[idx-1]; draft.items[idx-1]=draft.items[idx]; draft.items[idx]=t; }
+    if(act==="save"){ exportDraft(); return; }
+    renderEditor();
+  });
+
+  function exportDraft(){
+    var txt = JSON.stringify(draft, null, 2);
+    try{
+      var blob = new Blob([txt],{type:"application/json"}), a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = "lista.json"; document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      DATA = JSON.parse(txt); render();
+      toast("lista.json baixado. Agora envie o arquivo para o GitHub.");
+    }catch(e){ copy(txt, "Não deu para baixar; o conteúdo foi copiado."); }
+  }
+
+  document.getElementById("editfab").addEventListener("click", openEditor);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape" && !ed.hidden) closeEditor(); });
+
+  root.innerHTML = '<p class="empty" style="padding-top:80px">Carregando a lista…</p>';
+  fetch("lista.json?v="+Date.now(), {cache:"no-store"}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){ setData(d); if(isOwner) document.getElementById("editfab").hidden = false; render(); })
+    .catch(function(){ root.innerHTML = '<p class="empty" style="padding-top:80px">Não foi possível carregar a lista. Atualize a página em alguns segundos.</p>'; });
+})();
+</script>
+</body>
+</html>
