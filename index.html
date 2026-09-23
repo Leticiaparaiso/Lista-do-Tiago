@@ -179,6 +179,12 @@ label.f small{font-weight:400;color:var(--muted)}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .stats span{background:var(--bg);border-radius:12px;padding:8px 12px;font-size:14px}
 .stats b{font-size:18px;display:block}
+.chipsep{flex:none;width:1.5px;align-self:stretch;background:var(--line);margin:2px 4px}
+.divider{display:flex;align-items:center;gap:14px;margin:40px 0 0;color:var(--muted);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.divider:before,.divider:after{content:"";flex:1;height:1.5px;background:var(--line)}
+.section.special .subnav a{background:#fff}
+.section.special{background:var(--accent-soft);border-radius:28px;padding:24px 18px 20px;margin-top:18px}
+@media(max-width:560px){.section.special{padding:18px 10px 14px;border-radius:20px;margin-left:-6px;margin-right:-6px}}
 .metabox{background:var(--paper);box-shadow:var(--shadow);border-radius:16px;padding:14px 16px;margin:0 0 14px}
 .metabox p{margin:0 0 8px;font-weight:700}
 .metabox p.small{margin:8px 0 0;font-weight:400}
@@ -273,10 +279,11 @@ label.f small{font-weight:400;color:var(--muted)}
     if(it.pool){ var g=goalOf(it); return g>0 && raisedOf(it)>=g; }
     return left(it)===0;
   }
+  function isSpecialCat(c){ return DATA.items.some(function(it){ return cap(it.category)===c && it.meta; }); }
   function categories(){
     var out=[];
     DATA.items.forEach(function(it){ var c=cap(it.category); if(out.indexOf(c)<0) out.push(c); });
-    return out;
+    return out.filter(function(c){return !isSpecialCat(c);}).concat(out.filter(isSpecialCat));
   }
   function find(id){ for(var i=0;i<DATA.items.length;i++) if(DATA.items[i].id===id) return DATA.items[i]; return null; }
 
@@ -410,8 +417,10 @@ label.f small{font-weight:400;color:var(--muted)}
     if(state.cat!=="todos" && cats.indexOf(state.cat)<0) state.cat="todos";
     h+='<nav class="toolbar" aria-label="Categorias"><div class="wrap"><div class="chips">';
     h+='<button class="chip'+(state.cat==="todos"?' on':'')+'" data-cat="todos">Todos</button>';
+    var sepDone=false;
     cats.forEach(function(c){
       var n=DATA.items.filter(function(it){return cap(it.category)===c && !isDone(it);}).length;
+      if(isSpecialCat(c) && !sepDone){ h+='<span class="chipsep" aria-hidden="true"></span>'; sepDone=true; }
       h+='<button class="chip'+(state.cat===c?' on':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'<small>'+n+'</small></button>';
     });
     h+='</div><label class="toggle"><input type="checkbox" id="avail"'+(state.avail?' checked':'')+'> Só disponíveis</label></div></nav>';
@@ -424,7 +433,9 @@ label.f small{font-weight:400;color:var(--muted)}
       if(!list.length) return;
       shown+=list.length;
       var avail=list.filter(function(it){return !isDone(it);}).length;
-      h+='<section class="section" id="cat-'+slug(c)+'"><div class="section-head"><h2>'+esc(c)+'</h2><span>'+avail+' disponíve'+(avail===1?'l':'is')+'</span></div>';
+      var spc=isSpecialCat(c);
+      if(spc && state.cat==="todos") h+='<div class="divider"><span>Fraldas</span></div>';
+      h+='<section class="section'+(spc?' special':'')+'" id="cat-'+slug(c)+'"><div class="section-head"><h2>'+esc(c)+'</h2><span>'+avail+' disponíve'+(avail===1?'l':'is')+'</span></div>';
       var subs=[]; list.forEach(function(it){ var s=it.sub.trim(); if(subs.indexOf(s)<0) subs.push(s); });
       if(subs.length>1 || (subs.length===1 && subs[0])){
         var named=subs.filter(Boolean);
