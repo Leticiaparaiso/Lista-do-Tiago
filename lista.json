@@ -26,16 +26,16 @@
       "id": "fr-g",
       "name": "Fraldas G",
       "unit": "fraldas",
-      "min": 500,
-      "max": 500,
+      "min": 700,
+      "max": 700,
       "have": 388
     },
     {
       "name": "Fraldas GG",
       "unit": "unidades",
       "id": "mimufpjh86msm25",
-      "min": 500,
-      "max": 600,
+      "min": 600,
+      "max": 800,
       "have": 0
     }
   ],
